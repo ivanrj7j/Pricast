@@ -17,4 +17,12 @@ signup.addEventListener('click', () => {
     data.append('email', email);
     data.append('pass', password);
     // appending the data 
+
+    xhr.open('POST', '/add_member');
+    // connecting to the register 
+    xhr.send(data);
+    // sending the data to backend 
+    xhr.addEventListener('load', ()=>{
+        console.log(xhr.response);
+    });
 });

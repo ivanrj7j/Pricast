@@ -23,6 +23,18 @@ signup.addEventListener('click', () => {
     xhr.send(data);
     // sending the data to backend 
     xhr.addEventListener('load', ()=>{
-        console.log(xhr.response);
+        let response = xhr.response;
+        if (response == 'o') {
+            window.open('/');
+        }
+        else{
+            if(response == 't'){
+                alert("Email is already taken");
+                location.reload()
+            }else{
+                alert("Something went wrong");
+                location.reload()
+            }
+        }
     });
 });

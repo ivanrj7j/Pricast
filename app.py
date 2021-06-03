@@ -25,8 +25,7 @@ class User(db.Model):
 
 
 def check_logged_in():
-    if bool(session['email']):
-        print("Hi")
+    if 'email' in session:
         print(session['email'])
         return True
     else:
@@ -40,16 +39,16 @@ def check_session(q):
 
 @app.route('/')
 def hello():
-    print(session['email'])
-    return render_template('index.html', title="Home Page", logged=check_logged_in)
+    
+    return render_template('index.html', title="Home Page", logged=check_logged_in())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-   return render_template('login.html', title='Login', logged=check_logged_in)
+   return render_template('login.html', title='Login', logged=check_logged_in())
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-   return render_template('signup.html', title='Signup', logged=check_logged_in)
+   return render_template('signup.html', title='Signup', logged=check_logged_in())
 
 @app.route('/add_member', methods=['GET', 'POST'])
 def add_member():

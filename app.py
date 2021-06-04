@@ -1,4 +1,5 @@
 from __future__ import with_statement
+import re
 from flask import *
 from flask_sqlalchemy import *
 from cryptography.fernet import Fernet
@@ -57,12 +58,13 @@ def add_member():
        email = request.form.get('email')
        pass_encrypted = Fernet(key_2.encode()).encrypt(request.form.get('pass').encode()).decode()
        check_email = bool(User.query.filter_by(email=email).first())
-
+       print(pass_encrypted)
        if check_email == False:
            data = User(username=name, email=email, password=pass_encrypted, verified=0)
            db.session.add(data)
            db.session.commit()
            session['email'] = email
+           session['name'] = name
            return f"o"
        else:
            return "t"
@@ -70,6 +72,27 @@ def add_member():
        
    else:
         return redirect('/')
+
+@app.route('/check_login', methods=['GET', 'POST'])
+def check_login():
+   if request.method == 'POST':
+       email = request.form.get('email')
+       password = request.form.get('pass')
+       print(password)
+       check_email = User.query.filter_by(email=email).first()
+       if bool(check_email) == False:
+           return "not found"
+       password_encrypted = check_email.password.encode()
+       password_decrypted = Fernet(key_2.encode()).decrypt(password_encrypted).decode()
+       print(password_decrypted)
+       if password == password_decrypted:
+           session['email'] = email
+           session['name'] = check_email.username
+           return "success"
+       else:
+           return f"failed"
+   else:
+       return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True, port=1234)

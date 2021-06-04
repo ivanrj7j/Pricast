@@ -25,7 +25,7 @@ signup.addEventListener('click', () => {
     xhr.addEventListener('load', ()=>{
         let response = xhr.response;
         if (response == 'o') {
-            window.open('/');
+            location.href = '/';
         }
         else{
             if(response == 't'){
